@@ -1,2 +1,2 @@
 # my-elk
-elasticsearch + logstash + kibana
+elasticsearch + logstash + kibana + nginx
