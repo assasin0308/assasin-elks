@@ -2,15 +2,24 @@
 
 ##### elasticsearch6.6.0 + elasticsearch-head +  logstash6.6.0 + kibana6.6.0 + filebeat-6.6.0 + nginx + redis5+ tomcat + mysql
 
-### 1. elasticsearch installation
+##### https://www.elastic.co/guide/index.html
+
+### 1. jdk installation
 
 ```json
-
+  yum install java-1.8.0-openjdk.x86_64 -y
+ # update time
+  yum install ntpdate -y
+  ntpdate time1.aliyun.com
 ```
 
-### 2. 
+### 2. elasticsearch6.6.0 installation
 
 ```json
+yum install elasticsearch-6.6.0.rpm
+
+# configuration
+vim /etc/elasticsearch/elasticsearch.yml
 
 ```
 
