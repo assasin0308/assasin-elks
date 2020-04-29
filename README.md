@@ -1,6 +1,6 @@
 # my-elk
 
-##### elasticsearch6.6.0 + elasticsearch-head +  logstash7.6.2 + kibana7.6.2 + nginx + redis5+ tomcat + mysql
+##### elasticsearch6.6.0 + elasticsearch-head +  logstash6.6.0 + kibana6.6.0 + filebeat-6.6.0 + nginx + redis5+ tomcat + mysql
 
 ### 1. elasticsearch installation
 
@@ -119,21 +119,21 @@
 ### 20. 
 
 ```json
-# 修改nginx日志json格式
-
-log_format main '{ "time_local": "$time_local", '
-                           '"remote_addr": "$remote_addr", '
-                           '"referer": "$http_referer", '
-                           '"request": "$request", '
-                           '"status": $status, '
-                           '"bytes": $body_bytes_sent, '
-                           '"agent": "$http_user_agent", '
-                           '"x_forwarded": "$http_x_forwarded_for", '
-                           '"up_addr": "$upstream_addr",'
-                           '"up_host": "$upstream_http_host",'
-                           '"upstream_time": "$upstream_response_time",'
-                           '"request_time": "$request_time"'
-    ' }';
+# jsonify nginx-access-log to json format
+log_format main '{ 
+        "time_local": "$time_local", '
+        '"remote_addr": "$remote_addr", '
+        '"referer": "$http_referer", '
+        '"request": "$request", '
+        '"status": $status, '
+        '"bytes": $body_bytes_sent, '
+        '"agent": "$http_user_agent", '
+        '"x_forwarded": "$http_x_forwarded_for", '
+        '"up_addr": "$upstream_addr",'
+        '"up_host": "$upstream_http_host",'
+        '"upstream_time": "$upstream_response_time",'
+        '"request_time": "$request_time"'
+  ' }';
 access_log  logs/access.log  main;
 ```
 
