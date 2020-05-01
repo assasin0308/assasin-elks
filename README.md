@@ -41,6 +41,10 @@ vim /etc/elasticsearch/elasticsearch.yml
     network.host: 192.168.2.104
     http.port: 9200
 	discovery.zen.ping.unicast.hosts: ["192.168.2.104", "192.168.2.101"]
+     
+    # write in the end
+	http.cors.enabled: true 
+	http.cors.allow-origin: "*"
 
 vim /etc/elasticsearch/jvm.options
     -Xms512m
@@ -98,24 +102,57 @@ npm install grunt -save
 npm install 
 npm run start &
 
-
 ```
 
-### 5. 
+### 5.  re_modify elasticsearch.yml
 
 ```json
+# append config in the end
+http.cors.enabled: true 
+http.cors.allow-origin: "*"
 
+systemctl restart elasticsearch.service
 ```
 
-### 6. 
+### 6. tips of elasticsearch start failed
 
 ```json
+https://www.elastic.co/guide/en/elasticsearch/reference/6.4/setup-configuration-memory.html
+https://www.elastic.co/guide/en/elasticsearch/reference/6.4/setting-system-settings.html#sysconfig
 
+vim /usr/lib/systemd/system/elasticsearch.service
+### append config
+[Service]
+LimitMEMLOCK=infinity
+### restart
+systemctl daemon-reload
+systemctl restart elasticsearch
 ```
 
-### 7. 
+### 7.  查看集群状态信息
 
 ```json
+curl -- sXGET http://192.168.2.101:9200/_cluster/health?pretty=true
+
+# result is below
+curl: (6) Could not resolve host: sXGET; Name or service not known
+{
+  "cluster_name" : "elk-cluster1",
+  "status" : "green",
+  "timed_out" : false,
+  "number_of_nodes" : 2,
+  "number_of_data_nodes" : 2,
+  "active_primary_shards" : 5,
+  "active_shards" : 10,
+  "relocating_shards" : 0,
+  "initializing_shards" : 0,
+  "unassigned_shards" : 0,
+  "delayed_unassigned_shards" : 0,
+  "number_of_pending_tasks" : 0,
+  "number_of_in_flight_fetch" : 0,
+  "task_max_waiting_in_queue_millis" : 0,
+  "active_shards_percent_as_number" : 100.0
+}
 
 ```
 
