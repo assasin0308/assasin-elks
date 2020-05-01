@@ -156,16 +156,56 @@ curl: (6) Could not resolve host: sXGET; Name or service not known
 
 ```
 
-### 8. 
+### 8. elk_status monitor python script
 
-```json
+```python
+# coding:utf-8
+import subprocess
 
+body = ""
+false = "false"
+obj = subprocess.Popen(("curl -sXGET http://192.168.2.101:9200/_cluster/health?pretty=true"),shell=True,stdout=subprocess.PIPE)
+result = obj.stdout.read()
+data = eval(result)
+elk_status = data.get('status')
+
+if elk_status == 'green':
+	print "正常"
+else:
+	print "异常"
 ```
 
-### 9. 
+### 9.  logstash installation
 
 ```json
+# on 192.168.2.104
+yum install logstash-6.6.0.rpm -y 
+# /usr/share/logstash/bin/logstash --help
+# collect system log
+vim /etc/logstash/conf.d/systemlog.conf
+input {
+  file {
+     type => "systemlog-104"
+     path => "/var/log/messages"
+     start_position => "beginning"
+     stat_interval => "3"
+   }
+}
 
+output {
+   elasticsearch {
+     hosts => ["192.168.2.101:9200"]
+     index => "logstash-system-log-104-%{+YYYY.MM.dd}"
+  }
+   file {
+     path => "/tmp/123.txt"
+  }
+}
+
+# test config file
+/usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/systemlog.conf -t
+# chmod 644 /var/log/logstash/
+systemctl start loggstash
 ```
 
 ### 10. 
