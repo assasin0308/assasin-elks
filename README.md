@@ -4,10 +4,24 @@
 
 ##### https://www.elastic.co/guide/index.html
 
+##### software: https://pan.baidu.com/s/1JN0pDRfhRuGSxl767b9bOQ       3llm
+
+##### 192.168.2.103  node.name: node-101
+
+##### 192.168.2.104   node.name: node-104
+
 ### 1. jdk installation
 
 ```json
-  yum install java-1.8.0-openjdk.x86_64 -y
+# https://pan.baidu.com/s/1UrMBBD_08YArZwahLzDp_w  bri8 
+yum install jdk-8u241-linux-x64.rpm -y
+vim /etc/profile
+	export JAVA_HOME=/usr/java/jdk1.8.0_241-amd64/
+	export JRE_HOME=$JAVA_HOME/jre
+	export CLASSPATH=.:$JAVA_HOME/lib:$JRE_HOME/lib
+	export PATH=$JAVA_HOME/bin:$PATH
+source /etc/profile
+
  # update time
   yum install ntpdate -y
   ntpdate time1.aliyun.com
@@ -16,22 +30,74 @@
 ### 2. elasticsearch6.6.0 installation
 
 ```json
-yum install elasticsearch-6.6.0.rpm
-
+yum install elasticsearch-6.6.0.rpm -y
 # configuration
 vim /etc/elasticsearch/elasticsearch.yml
+	cluster.name: elk-cluster1
+    node.name: elk-node-1
+	# node.name: elk-node-2
+    path.data: /var/lib/elasticsearch
+    path.logs: /var/log/elasticsearch
+    network.host: 192.168.2.104
+    http.port: 9200
+	discovery.zen.ping.unicast.hosts: ["192.168.2.104", "192.168.2.101"]
+
+vim /etc/elasticsearch/jvm.options
+    -Xms512m
+    -Xmx512m
+systemctl daemon-reload
+systemctl enable elasticsearch.service
+systemctl start elasticsearch.service
+
+# test is success
+netstat -lntup|grep 9200
+
+curl 192.168.2.104:9200
+{
+  "name" : "node-1",
+  "cluster_name" : "elasticsearch",
+  "cluster_uuid" : "PPzevLOiT769QFVgv6Bkug",
+  "version" : {
+    "number" : "6.6.0",
+    "build_flavor" : "default",
+    "build_type" : "rpm",
+    "build_hash" : "a9861f4",
+    "build_date" : "2019-01-24T11:27:09.439740Z",
+    "build_snapshot" : false,
+    "lucene_version" : "7.6.0",
+    "minimum_wire_compatibility_version" : "5.6.0",
+    "minimum_index_compatibility_version" : "5.0.0"
+  },
+  "tagline" : "You Know, for Search"
+}
 
 ```
 
-### 3. 
+### 3. node/npm installation
 
 ```json
-
+wget https://nodejs.org/dist/v10.13.0/node-v10.13.0-linux-x64.tar.xz
+xz -d node-v10.13.0-linux-x64.tar.xz
+tar -xf node-v10.13.0-linux-x64.tar
+ln -s ~/node-v10.13.0-linux-x64/bin/node /usr/bin/node
+ln -s ~/node-v10.13.0-linux-x64/bin/npm /usr/bin/npm
+node -v
+npm -v
+npm install -g cnpm --registry=https://registry.npm.taobao.org
+ln -s /usr/local/node-v10.13.0-linux-x64/bin/cnpm /usr/bin/cnpm
 ```
 
-### 4. 
+### 4.  elasticsearch-head installation
 
 ```json
+git://github.com/mobz/elasticsearch-head.git
+unzip elasticsearch-head-master.zip
+mv elasticsearch-head-master ./elasticsearch-head
+cd elasticsearch-head
+npm install grunt -save
+npm install 
+npm run start &
+
 
 ```
 
