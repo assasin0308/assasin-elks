@@ -407,6 +407,7 @@ output {
 yum install mariadb-server
 systemctl enable mariadb
 systemctl start mariadb
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY '123456' WITH GRANT OPTION;
 grant all privileges on elk.* to  elk@'%' identified by '123456';
 FLUSH PRIVILEGES;
 
