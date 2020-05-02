@@ -405,6 +405,57 @@ output {
 
 ```json
 yum install mariadb-server
+systemctl enable mariadb
+systemctl start mariadb
+grant all privileges on elk.* to  elk@'%' identified by '123456';
+FLUSH PRIVILEGES;
+
+
+# mysql-connnect-java
+https://dev.mysql.com/downloads/connector
+
+mkdir -pv /usr/share/logstash/vendor/jar/jbdc
+# mysql-connector-java-5.1.45.tar.gz
+tar -xvf mysql-connector-java-5.1.45.tar.gz
+cd mysql-connector-java-5.1.45
+mv mysql-connector-java-5.1.45/mysql-connector-java-5.1.45-bin.jar  /usr/share/logstash/vendor/jar/jbdc
+
+
+/usr/share/logstash/bin/logstash-plugin list
+
+
+input {
+    file {
+       path => "/usr/local/nginx/logs/access.log"
+       type => "nginx-access-log-101"
+       start_position => "beginning"
+       stat_interval => "5"
+       codec => "json"
+	}
+    file {
+       path => "/var/log/messages"
+       type => "system-log-101"
+       start_position => "beginning"
+       stat_interval => "5" 
+    }
+}
+
+output {
+    if [type] == "nginx-access-log-101" {
+        elasticsearch {
+             hosts => ["192.168.2.101:9200"]
+			 index => "logstash-nginx-accesslog-101-%{+YYYY.MM.dd}"
+    	}
+		file {
+            path => "/tmp/nginx-json-log.txt"
+        }
+		jdbc {
+            connection_string => "jdbc:mysql://192.168.2.101/elk/?user=elk&password=123456&useUnicode=true&characterEncoding=UTF8"
+            statement => ["insert into elklog(host,url,clienip,responsetime,upstreamtime) values(?,?,?,?,?)","host","url","clientip","responsetime","upstreamtime"]
+        }
+    }
+    
+}
 ```
 
 ### 18. 
