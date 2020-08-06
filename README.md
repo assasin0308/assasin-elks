@@ -291,6 +291,36 @@ log_format main '{
 access_log  logs/access.log  main;
 
 #--------------------------------------------------------------------------
+log_format access_json '{"time_local": "$time_local", '
+    	'"status": $status, '
+    	'"request_method": "$request_method", '
+    	'"query_string": "$query_string", '
+    	'"script_name": "$fastcgi_script_name", '
+    	'"request_uri": "$request_uri", '
+    	'"document_root": "$document_root", '
+    	'"server_protocol": "$server_protocol", '
+    	'"request_scheme": "$scheme", '
+    	'"content_type": "$content_type", '
+    	'"server_protocol": "$server_protocol", '
+    	'"content_length": "$content_length", '
+        '"remote_addr": "$remote_addr", '
+        '"remote_user": "$remote_user", '
+        '"remote_port": "$remote_port", '
+        '"server_port": "$server_port", '
+        '"server_name": "$server_name", '
+        '"referer": "$http_referer", '
+        '"request": "$request", '
+        '"bytes": $body_bytes_sent, '
+        '"agent": "$http_user_agent", '
+        '"x_forwarded": "$http_x_forwarded_for", '
+        '"up_addr": "$upstream_addr",'
+        '"up_host": "$upstream_http_host",'
+        '"upstream_time": "$upstream_response_time",'
+        '"request_time": "$request_time"'
+        ' }';
+	
+	
+#------------------------------------------------------------------------------------------------------------------------
 
 log_format access_json '{
     "@timestamp":"$time_iso8601",'
