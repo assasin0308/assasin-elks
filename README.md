@@ -204,6 +204,9 @@ output {
 
 # test config file
 /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/systemlog.conf -t
+
+/usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/systemlog.conf  --config.reload.automatic
+
 # chmod 644 /var/log/logstash/
 systemctl start loggstash
 ```
