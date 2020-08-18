@@ -207,6 +207,8 @@ output {
 
 /usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/systemlog.conf  --config.reload.automatic
 
+/usr/share/logstash/bin/logstash -f /etc/logstash/conf.d/nginx128.conf  --path.data=/var/lib/logstash/
+
 # chmod 644 /var/log/logstash/
 systemctl start loggstash
 ```
